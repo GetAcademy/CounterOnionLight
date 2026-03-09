@@ -1,34 +1,29 @@
+using CounterOnionLight.API.DTOs;
+using CounterOnionLight.Core.ApplicationServices;
+using CounterOnionLight.Core.DomainServices;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
+builder.Services.AddScoped<CounterService>();
+//builder.Services.AddScoped<ICounterRepository, XRepository>();
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapPost("/counters/{id}/increment", async (
+    int id,
+    IncrementRequest request,
+    CounterService service) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    try
+    {
+        var value = await service.IncrementAsync(id, request.Who);
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+        return Results.Ok(new { value });
+    }
+    catch (Exception)
+    {
+        return Results.Conflict("Counter was updated by someone else");
+    }
 });
 
-app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+app.Run();
