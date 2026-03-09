@@ -33,7 +33,7 @@ namespace CounterOnionLight.Infrastructure
 
         public async Task SaveAsync(Counter counter)
         {
-            var entity = new Counter
+            var entity = new CounterOnionLight.Infrastructure.Infrastructure.Entities.Counter
             {
                 Id = counter.Id,
                 Value = counter.Value,
