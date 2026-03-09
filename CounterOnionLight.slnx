@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Docs/">
+    <File Path="../../../Downloads/onion light.png" />
+  </Folder>
+  <Project Path="CounterOnionLight.API/CounterOnionLight.API.csproj" />
+  <Project Path="CounterOnionLight.Core/CounterOnionLight.Core.csproj" />
+  <Project Path="CounterOnionLight.Infrastructure/CounterOnionLight.Infrastructure.csproj" />
+  <Project Path="CounterOnionLight.Test/CounterOnionLight.Test.csproj" />
+</Solution>
