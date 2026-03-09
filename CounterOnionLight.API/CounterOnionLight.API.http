@@ -1,6 +1,12 @@
 @CounterOnionLight.API_HostAddress = http://localhost:5100
 
-GET {{CounterOnionLight.API_HostAddress}}/weatherforecast/
+POST {{CounterOnionLight.API_HostAddress}}/counters/1/increment
 Accept: application/json
+Content-type: application/json
+
+{
+  "who": "Terje",
+  "rowVersion": "AAAAAAAAJxg="
+}
 
 ###
