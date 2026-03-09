@@ -33,20 +33,30 @@ namespace CounterOnionLight.Infrastructure
 
         public async Task SaveAsync(Counter counter)
         {
-            var entity = new CounterOnionLight.Infrastructure.Infrastructure.Entities.Counter
-            {
-                Id = counter.Id,
-                Value = counter.Value,
-                LastUpdatedBy = counter.LastUpdatedBy,
-                RowVersion = counter.RowVersion
-            };
-
-            _context.Attach(entity);
-
-            _context.Entry(entity).Property(e => e.Value).IsModified = true;
-            _context.Entry(entity).Property(e => e.LastUpdatedBy).IsModified = true;
-
+            var entity = await _context.Counters.FindAsync(counter.Id);
+            entity.LastUpdatedBy = counter.LastUpdatedBy;
+            entity.Value = counter.Value;
             await _context.SaveChangesAsync();
+            /*
+             * Alternativ uten optimistic concurrency:
+             * 1: les rad fra db
+             * 2: oppdater felter
+             * 3: lagre tilbake
+             */
+            //var entity = new CounterOnionLight.Infrastructure.Infrastructure.Entities.Counter
+            //{
+            //    Id = counter.Id,
+            //    Value = counter.Value,
+            //    LastUpdatedBy = counter.LastUpdatedBy,
+            //    RowVersion = counter.RowVersion
+            //};
+
+            //_context.Attach(entity);
+
+            //_context.Entry(entity).Property(e => e.Value).IsModified = true;
+            //_context.Entry(entity).Property(e => e.LastUpdatedBy).IsModified = true;
+
+            //await _context.SaveChangesAsync();
         }
 
         public async Task AddHistoryAsync(CounterHistoryEntry entry)
